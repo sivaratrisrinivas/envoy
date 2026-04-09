@@ -139,6 +139,14 @@ Recommended Railway setup:
 - set `RECOVERY_STALE_AFTER_SECONDS=120`
 - verify `GET /healthz` and `GET /readyz` after the first deploy
 
+If your Railway database service is named `Postgres`, set this on the `web` service:
+
+```bash
+DATABASE_URL=${{Postgres.DATABASE_URL}}
+```
+
+That keeps the app on Railway's internal network instead of hardcoding a raw connection string.
+
 Send the hero event from a second shell:
 
 ```bash
