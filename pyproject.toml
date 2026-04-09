@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "envoy-action-agent"
+version = "0.1.0"
+description = "Action Agent prototype for turning watcher events into GTM actions."
+requires-python = ">=3.10"
+dependencies = [
+  "fastapi",
+  "uvicorn",
+  "pydantic",
+  "sqlalchemy",
+  "httpx",
+  "pyyaml",
+  "google-genai",
+  "psycopg[binary]",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]

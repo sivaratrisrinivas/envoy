@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic
+sqlalchemy
+httpx
+pyyaml
+google-genai
+psycopg[binary]

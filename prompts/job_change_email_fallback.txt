@@ -1,0 +1,7 @@
+Subject: Quick congrats on your move to {{ new_company_name }}
+
+Hi {{ first_name }},
+
+I saw you stepped into the {{ new_title }} role at {{ new_company_name }}. Given the conversations we had while you were at {{ old_company_name }}, I thought it could be useful to reconnect and compare notes as you get settled.
+
+If helpful, I can send over a short point of view or we can grab 15 minutes next week.
