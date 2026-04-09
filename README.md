@@ -98,10 +98,12 @@ Important variables:
 - `AIRTABLE_CONTACTS_TABLE`: default `Contacts`
 - `AIRTABLE_ACCOUNTS_TABLE`: default `Accounts`
 - `AIRTABLE_ACTIVITY_TABLE`: default `Activity Log`
+- `DISPATCH_INLINE`: default `0`; keep this `0` on Railway so the API returns quickly
+- `RECOVERY_STALE_AFTER_SECONDS`: default `120`; controls when hosted recovery retries a stuck workflow
+- `DATABASE_URL`: required for durable hosted persistence; Railway Postgres will provide this automatically
 
-Useful extra variables not shown in `.env.example`:
+Useful local demo override:
 - `DISPATCH_INLINE=1`: runs the workflow inline so the local demo feels immediate
-- `DATABASE_URL=...`: use Postgres instead of local SQLite
 
 ## Quick Start
 
@@ -122,6 +124,20 @@ Run the app:
 ```bash
 ./.venv/bin/python -m uvicorn app.main:app --reload
 ```
+
+## Railway Manual Deploy
+
+In Railway's website UI, set the service start command to:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+Recommended Railway setup:
+- attach a Postgres service so `DATABASE_URL` is populated
+- keep `DISPATCH_INLINE=0`
+- set `RECOVERY_STALE_AFTER_SECONDS=120`
+- verify `GET /healthz` and `GET /readyz` after the first deploy
 
 Send the hero event from a second shell:
 

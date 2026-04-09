@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from threading import Event, RLock, Thread
 import time
 
@@ -134,7 +134,9 @@ class AppRuntime:
 
         def loop() -> None:
             while not self.stop_event.is_set():
-                stale_before = "9999-12-31T23:59:59+00:00"
+                stale_before = (
+                    datetime.now(timezone.utc) - timedelta(seconds=self.config.recovery_stale_after_seconds)
+                ).isoformat()
                 self.recover_stale_runs(stale_before=stale_before)
                 time.sleep(interval_seconds)
 

@@ -25,6 +25,7 @@ class AppConfig:
     airtable_accounts_table: str
     airtable_activity_table: str
     dispatch_inline: bool
+    recovery_stale_after_seconds: int
 
     @property
     def local_dir(self) -> Path:
@@ -94,6 +95,7 @@ class AppConfig:
             airtable_accounts_table=os.getenv("AIRTABLE_ACCOUNTS_TABLE", "Accounts"),
             airtable_activity_table=os.getenv("AIRTABLE_ACTIVITY_TABLE", "Activity Log"),
             dispatch_inline=os.getenv("DISPATCH_INLINE", "0") == "1",
+            recovery_stale_after_seconds=max(15, int(os.getenv("RECOVERY_STALE_AFTER_SECONDS", "120"))),
         )
 
     @classmethod
@@ -117,6 +119,7 @@ class AppConfig:
             airtable_accounts_table="Accounts",
             airtable_activity_table="Activity Log",
             dispatch_inline=True,
+            recovery_stale_after_seconds=120,
         )
 
     def ensure_directories(self) -> None:
