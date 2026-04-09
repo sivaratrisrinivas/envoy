@@ -5,6 +5,16 @@ from pathlib import Path
 import os
 
 
+def _normalize_database_url(url: str) -> str:
+    if url.startswith("postgresql+"):
+        return url
+    if url.startswith("postgres://"):
+        return "postgresql+psycopg://" + url.removeprefix("postgres://")
+    if url.startswith("postgresql://"):
+        return "postgresql+psycopg://" + url.removeprefix("postgresql://")
+    return url
+
+
 @dataclass(frozen=True)
 class AppConfig:
     root_dir: Path
@@ -50,7 +60,7 @@ class AppConfig:
     @property
     def resolved_database_url(self) -> str:
         if self.database_url:
-            return self.database_url
+            return _normalize_database_url(self.database_url)
         return f"sqlite:///{self.db_path}"
 
     @property
