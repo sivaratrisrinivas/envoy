@@ -30,6 +30,14 @@ class DraftService:
             self.repair_provider = self._provider_from_config(config, config.llm_fallback_model)
         self.policy = policy or MessagePolicy(config.policy_path)
 
+    def _stamp_metadata(self, draft: DraftArtifact, *, model_name: str) -> DraftArtifact:
+        return draft.model_copy(
+            update={
+                "llm_provider": self.config.llm_provider_label,
+                "llm_model": model_name,
+            }
+        )
+
     @staticmethod
     def _provider_from_config(config: AppConfig, model_name: str) -> LLMProvider | None:
         if config.llm_mode != "live":
@@ -42,12 +50,18 @@ class DraftService:
         if self.provider is None or self.config.llm_mode == "fake":
             return generate_fallback_draft(self.config, event)
 
-        primary = self.provider.generate_structured_draft(event, context)
+        primary = self._stamp_metadata(
+            self.provider.generate_structured_draft(event, context),
+            model_name=self.config.llm_model,
+        )
         if self.policy.validate(event, primary).valid:
             return primary
 
         if self.repair_provider is not None:
-            repaired = self.repair_provider.generate_structured_draft(event, context)
+            repaired = self._stamp_metadata(
+                self.repair_provider.generate_structured_draft(event, context),
+                model_name=self.config.llm_fallback_model,
+            )
             if self.policy.validate(event, repaired).valid:
                 return repaired
 

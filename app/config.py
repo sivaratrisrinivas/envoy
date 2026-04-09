@@ -72,6 +72,12 @@ class AppConfig:
         return self.root_dir / "prompts"
 
     @property
+    def llm_provider_label(self) -> str:
+        if self.llm_provider == "gemini":
+            return "Gemini"
+        return self.llm_provider
+
+    @property
     def prompt_template_path(self) -> Path:
         return self.prompts_dir / "job_change_email.md"
 
@@ -92,9 +98,9 @@ class AppConfig:
             admin_secret=os.getenv("ADMIN_SECRET", "dev-admin-secret"),
             tenant_id=os.getenv("TENANT_ID", "demo_crustdata"),
             demo_env=os.getenv("DEMO_ENV", "envoy_local_v1"),
-            crm_mode=os.getenv("CRM_MODE", "fake"),
-            llm_mode=os.getenv("LLM_MODE", "fake"),
-            llm_provider=os.getenv("LLM_PROVIDER", "gemini"),
+            crm_mode=os.getenv("CRM_MODE", "fake").lower(),
+            llm_mode=os.getenv("LLM_MODE", "fake").lower(),
+            llm_provider=os.getenv("LLM_PROVIDER", "gemini").lower(),
             llm_model=os.getenv("LLM_MODEL", "gemini-3-flash-preview"),
             llm_fallback_model=os.getenv("LLM_FALLBACK_MODEL", "gemini-2.5-flash"),
             database_url=os.getenv("DATABASE_URL"),

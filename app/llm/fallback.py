@@ -27,7 +27,7 @@ def generate_fallback_draft(config: AppConfig, event: JobChangeEvent) -> DraftAr
             event.old_company_name,
         ],
         warnings=["deterministic_fallback_used"],
-        llm_provider=config.llm_provider,
+        llm_provider=config.llm_provider_label,
         llm_model=config.llm_model,
         llm_attempt_path="deterministic_fallback",
     )
